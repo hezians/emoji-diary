@@ -1,0 +1,1601 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
+<title>이모지 다이어리</title>
+<style>
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  background: #FBF4DE;
+}
+@font-face {
+  font-family: 'Mona12';
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+  src: url('https://cdn.jsdelivr.net/gh/MonadABXY/mona-font/web/Mona12.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Mona12';
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+  src: url('https://cdn.jsdelivr.net/gh/MonadABXY/mona-font/web/Mona12-Bold.woff2') format('woff2');
+}
+
+.ediary * { box-sizing: border-box; }
+.ediary button, .ediary input, .ediary textarea, .ediary select {
+  font-family: 'Mona12', sans-serif;
+}
+.ediary {
+  --paper: #FBF4DE;
+  --paper-line: #E4D6AD;
+  --ink: #2B2B2B;
+  --ink-soft: #7A7160;
+  --white: #FFFFFF;
+  --accent: #E4405F;
+  --accent-light: #FBD2DA;
+  --on-accent: #FFFFFF;
+
+  box-sizing: border-box;
+  font-family: 'Mona12', sans-serif;
+  font-feature-settings: "locl" 1;
+  font-language-override: "KOR";
+  color: var(--ink);
+  background-color: var(--paper);
+  border-radius: 0;
+  padding: 24px 20px 32px;
+  width: 100%;
+  max-width: 600px;
+  height: 100vh;
+  height: 100dvh;
+  margin: 0 auto;
+  position: relative;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+.ediary h1, .ediary h2, .ediary .hand {
+  font-family: 'Mona12', sans-serif;
+}
+
+.ediary .header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 18px;
+}
+.ediary .title {
+  font-size: 26px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.ediary .icon-btn {
+  border: 2px solid var(--ink);
+  background: var(--white);
+  width: 36px;
+  height: 36px;
+  border-radius: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: var(--ink-soft);
+}
+.ediary .icon-btn:hover { color: var(--accent); }
+.ediary .tabs {
+  display: flex;
+  background: var(--white);
+  border: 2px solid var(--ink);
+  border-radius: 0;
+  padding: 3px;
+  gap: 2px;
+}
+.ediary .tab-btn {
+  border: none;
+  background: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  border-radius: 0;
+  cursor: pointer;
+  color: var(--ink-soft);
+  transition: background .15s, color .15s;
+}
+.ediary .tab-btn.active {
+  background: var(--ink);
+  color: var(--white);
+}
+
+.ediary .card {
+  background: var(--white);
+  border: 2px solid var(--ink);
+  box-shadow: 4px 4px 0 var(--ink);
+  border-radius: 0;
+  padding: 16px;
+}
+
+.ediary .month-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+.ediary .month-nav button {
+  border: 2px solid var(--ink);
+  background: var(--paper);
+  border-radius: 0;
+  width: 32px; height: 32px;
+  font-size: 18px;
+  cursor: pointer;
+  font-family: 'Mona12', sans-serif;
+  font-weight: 700;
+}
+.ediary .month-nav button:hover { background: var(--accent-light); }
+.ediary .month-label {
+  font-family: 'Mona12', sans-serif;
+  font-size: 22px;
+  font-weight: 700;
+}
+.ediary .today-btn-row {
+  display: flex;
+  justify-content: flex-end;
+  min-height: 22px;
+  margin-bottom: 6px;
+}
+.ediary .today-btn {
+  border: 2px solid var(--ink);
+  background: var(--paper);
+  color: var(--ink-soft);
+  border-radius: 0;
+  padding: 3px 10px;
+  font-size: 12px;
+  font-family: 'Mona12', sans-serif;
+  font-weight: 500;
+  cursor: pointer;
+}
+.ediary .today-btn:hover { background: var(--accent-light); }
+
+.ediary .weekdays {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  margin-bottom: 4px;
+}
+.ediary .weekdays span {
+  text-align: center;
+  font-size: 12px;
+  letter-spacing: 0.03em;
+  color: var(--ink-soft);
+  font-weight: 500;
+}
+
+.ediary .grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 4px;
+}
+.ediary .day-cell {
+  aspect-ratio: 0.8;
+  border-radius: 0;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  position: relative;
+  overflow: hidden;
+  font-family: 'Mona12', sans-serif;
+  font-size: 11px;
+  color: var(--ink-soft);
+  padding: 6px 1px 1px;
+}
+.ediary .day-cell.empty { visibility: hidden; cursor: default; }
+.ediary .day-cell:hover { background: var(--paper-line); }
+.ediary .day-cell.today .num { color: var(--accent); font-weight: 700; }
+.ediary .day-cell.future {
+  cursor: default;
+  opacity: 0.35;
+}
+.ediary .day-cell.future:hover { background: transparent; }
+
+.ediary .day-cell .num { line-height: 1; margin-bottom: 2px; flex: 0 0 auto; }
+.ediary .day-cell .sticker {
+  font-size: 18px;
+  line-height: 1;
+  height: 22px;
+  max-width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+.ediary .day-cell.has-entry {
+  background: var(--white);
+}
+.ediary .day-cell.has-entry .num {
+  font-size: 10px;
+  color: var(--ink-soft);
+}
+
+.ediary .overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(38,50,41,0.45);
+  display: flex;
+  align-items: flex-end;
+  z-index: 10;
+  border-radius: 0;
+}
+.ediary .sheet {
+  background: var(--white);
+  width: 100%;
+  border-top: 3px solid var(--ink);
+  border-radius: 0;
+  padding: 18px 18px 20px;
+  max-height: 86%;
+  overflow-y: auto;
+}
+.ediary .sheet-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+.ediary .recap-header {
+  justify-content: flex-end;
+}
+.ediary .backup-actions {
+  display: flex;
+  gap: 8px;
+}
+.ediary .backup-actions .btn {
+  flex: 1;
+  text-align: center;
+  text-decoration: none;
+}
+.ediary .backup-desc {
+  font-size: 14px;
+  color: var(--ink-soft);
+  line-height: 1.6;
+  margin: 0 0 16px;
+}
+.ediary .import-message {
+  font-size: 13px;
+  color: var(--ink-soft);
+  text-align: center;
+  margin-top: 8px;
+}
+.ediary .sheet-date {
+  font-family: 'Mona12', sans-serif;
+  font-size: 21px;
+  font-weight: 700;
+}
+.ediary .close-btn {
+  border: none;
+  background: none;
+  font-size: 18px;
+  cursor: pointer;
+  color: var(--ink-soft);
+}
+
+.ediary .header-emoji-btn {
+  border: none;
+  background: transparent;
+  font-family: 'Mona12', sans-serif;
+  font-size: 30px;
+  line-height: 1;
+  padding: 2px 4px;
+  border-radius: 0;
+  cursor: pointer;
+  color: var(--ink-soft);
+}
+.ediary .header-emoji-btn:hover { background: var(--accent-light); }
+.ediary .header-emoji-input {
+  border: 2px solid var(--ink);
+  background: var(--paper);
+  color: var(--ink);
+  border-radius: 0;
+  font-size: 22px;
+  text-align: center;
+  padding: 2px 6px;
+  width: 60px;
+  font-family: inherit;
+}
+.ediary .header-emoji-input:focus { outline: 2px solid var(--accent); }
+.ediary .header-emoji-input.input-error {
+  outline: 2px solid #C24A3B;
+  font-size: 12px;
+}
+.ediary .row-label {
+  font-size: 12px;
+  letter-spacing: 0.02em;
+  color: var(--ink-soft);
+  margin: 10px 0 6px;
+  font-weight: 700;
+}
+.ediary .recent-row {
+  display: flex;
+  gap: 6px;
+  overflow-x: auto;
+  padding-bottom: 2px;
+  margin: 0 0 4px;
+}
+.ediary .recent-row button {
+  flex: 0 0 auto;
+  width: 36px;
+  height: 36px;
+  border: 2px solid var(--ink);
+  background: var(--paper);
+  border-radius: 0;
+  font-size: 17px;
+  cursor: pointer;
+}
+.ediary .recent-row button:hover, .ediary .recent-row button.sel {
+  background: var(--accent-light);
+}
+.ediary .overlay.fullscreen {
+  align-items: stretch;
+}
+.ediary .sheet.fullscreen-sheet {
+  height: 100%;
+  max-height: 100%;
+  border-radius: 0;
+  border: none;
+  display: flex;
+  flex-direction: column;
+  padding: 18px 18px 20px;
+}
+.ediary .sheet.recap-sheet {
+  padding: 0;
+}
+.ediary .fullscreen-sheet .view-text {
+  flex: 1;
+  overflow-y: auto;
+}
+.ediary .view-top-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.ediary .view-emoji {
+  font-size: 30px;
+  line-height: 1;
+}
+.ediary .view-top-row .sheet-date {
+  font-family: 'Mona12', sans-serif;
+}
+.ediary .view-text {
+  font-family: 'Mona12', sans-serif;
+  font-size: 16px;
+  line-height: 1.9;
+  color: var(--ink);
+  border-radius: 0;
+  padding: 14px 0;
+  margin-bottom: 14px;
+  white-space: pre-wrap;
+  word-break: break-word;
+  min-height: 60px;
+}
+.ediary textarea {
+  width: 100%;
+  border: 2px solid var(--ink);
+  background: var(--paper);
+  color: var(--ink);
+  border-radius: 0;
+  padding: 10px;
+  font-family: 'Mona12', sans-serif;
+  font-size: 16px;
+  line-height: 1.7;
+  resize: vertical;
+  min-height: 80px;
+  margin-bottom: 12px;
+}
+.ediary .fullscreen-sheet textarea {
+  flex: 1;
+  min-height: 120px;
+  resize: none;
+}
+.ediary textarea:focus {
+  outline: none;
+}
+.ediary .sheet-actions {
+  display: flex;
+  gap: 8px;
+}
+.ediary .confirm-row {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.ediary .confirm-text {
+  font-size: 14px;
+  color: var(--ink);
+  text-align: center;
+}
+.ediary .btn {
+  flex: 1;
+  border: 2px solid var(--ink);
+  border-radius: 0;
+  padding: 10px;
+  font-family: 'Mona12', sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  background: var(--paper);
+  box-shadow: 3px 3px 0 var(--ink);
+}
+.ediary .btn.primary { background: var(--accent); color: var(--on-accent); }
+.ediary .btn.danger { background: var(--paper); color: #C24A3B; }
+
+.ediary .recap-launch-row {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 18px;
+}
+.ediary .recap-launch-btn {
+  flex: 1;
+  border: 2px solid var(--ink);
+  background: var(--accent);
+  color: var(--on-accent);
+  box-shadow: 3px 3px 0 var(--ink);
+  padding: 12px 8px;
+  font-family: 'Mona12', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+}
+.ediary .recap-frame {
+  flex: 1;
+  display: flex;
+  align-items: stretch;
+  justify-content: center;
+  overflow: auto;
+  padding: 0;
+}
+.ediary .recap-content {
+  flex: 1 1 auto;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: clamp(12px, 4vh, 20px);
+  padding: clamp(20px, 8vw, 32px);
+  background: var(--paper);
+  border: none;
+}
+.ediary .recap-header {
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 2;
+  padding: 14px;
+  margin-bottom: 0;
+}
+.ediary .recap-header .close-btn {
+  background: var(--white);
+  border: 2px solid var(--ink);
+  padding: 4px 8px;
+}
+.ediary .fullscreen-sheet.recap-sheet #save-recap-img {
+  position: absolute;
+  left: 16px;
+  right: 16px;
+  bottom: 16px;
+  z-index: 2;
+  margin-top: 0;
+}
+.ediary .recap-title {
+  font-size: clamp(22px, 6.5vw, 32px);
+  font-weight: 700;
+  line-height: 1.4;
+}
+.ediary .recap-stat-big {
+  font-size: clamp(44px, 15vw, 68px);
+  font-weight: 700;
+  color: var(--accent);
+  line-height: 1;
+}
+.ediary .recap-stat-unit {
+  display: block;
+  font-size: clamp(13px, 4vw, 18px);
+  color: var(--ink-soft);
+  margin-top: 6px;
+}
+.ediary .recap-emojis {
+  font-size: clamp(28px, 9vw, 44px);
+  letter-spacing: clamp(2px, 1.2vw, 6px);
+}
+.ediary .recap-detail {
+  font-size: clamp(13px, 4vw, 18px);
+  color: var(--ink-soft);
+}
+.ediary .fullscreen-sheet #save-recap-img {
+  margin-top: 12px;
+  flex: none;
+  padding: 8px;
+  font-size: 14px;
+}
+.ediary .stats-summary {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+.ediary .stats-summary.grid4 {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+}
+.ediary .card + .card {
+  margin-top: 18px;
+}
+.ediary .stat-box {
+  flex: 1;
+  background: var(--white);
+  border: 2px solid var(--ink);
+  border-radius: 0;
+  padding: 10px;
+  text-align: center;
+}
+.ediary .stat-box .num {
+  font-family: 'Mona12', sans-serif;
+  font-size: 26px;
+  font-weight: 700;
+  color: var(--accent);
+}
+.ediary .stat-box .lbl {
+  font-size: 12px;
+  letter-spacing: 0.02em;
+  color: var(--ink-soft);
+}
+.ediary .bar-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+.ediary .bar-emoji {
+  font-size: 20px;
+  width: 26px;
+  text-align: center;
+  border: none;
+  background: transparent;
+  padding: 0;
+  cursor: pointer;
+}
+.ediary .bar-emoji:hover { transform: scale(1.15); }
+.ediary .bar-track {
+  flex: 1;
+  background: var(--paper);
+  border-radius: 0;
+  height: 16px;
+  overflow: hidden;
+}
+.ediary .bar-fill {
+  height: 100%;
+  background: var(--accent);
+  border-radius: 0;
+}
+.ediary .bar-count {
+  font-size: 12px;
+  color: var(--ink-soft);
+  width: 22px;
+  text-align: right;
+}
+.ediary .mini-chart-track {
+  display: flex;
+  align-items: flex-end;
+  gap: 4px;
+  height: 70px;
+}
+.ediary .mini-bar {
+  flex: 1;
+  min-height: 2px;
+  background: var(--accent-light);
+  border-radius: 0;
+}
+.ediary .mini-chart-labels {
+  display: flex;
+  gap: 4px;
+  margin-top: 6px;
+}
+.ediary .mini-chart-labels span {
+  flex: 1;
+  text-align: center;
+  font-size: 11px;
+  color: var(--ink-soft);
+}
+.ediary .empty-msg {
+  text-align: center;
+  color: var(--ink-soft);
+  font-size: 14px;
+  padding: 30px 10px;
+}
+.ediary .search-box {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--white);
+  border: 2px solid var(--ink);
+  border-radius: 0;
+  padding: 10px 12px;
+  margin-bottom: 10px;
+  color: var(--ink-soft);
+}
+.ediary .search-box input {
+  flex: 1;
+  border: none;
+  background: transparent;
+  color: var(--ink);
+  font-family: 'Mona12', sans-serif;
+  font-size: 15px;
+}
+.ediary .search-box input:focus { outline: none; }
+.ediary .search-box #clear-search {
+  border: none;
+  background: none;
+  color: var(--ink-soft);
+  cursor: pointer;
+  font-size: 14px;
+  padding: 2px;
+}
+.ediary .list-card {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 10px;
+}
+.ediary .list-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  border: 2px solid var(--ink);
+  background: var(--paper);
+  border-radius: 0;
+  padding: 10px 12px;
+  width: 100%;
+}
+.ediary .list-item:hover { background: var(--paper-line); }
+.ediary .list-emoji {
+  font-size: 24px;
+  line-height: 1;
+  flex: 0 0 auto;
+  margin-top: 1px;
+  border: none;
+  background: transparent;
+  padding: 0;
+  cursor: pointer;
+}
+.ediary .list-emoji:hover { transform: scale(1.15); }
+.ediary .list-body {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  flex: 1;
+  border: none;
+  background: transparent;
+  padding: 0;
+  text-align: left;
+  cursor: pointer;
+}
+.ediary .list-date {
+  font-family: 'Mona12', sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--ink);
+}
+.ediary .list-text {
+  font-size: 14px;
+  color: var(--ink-soft);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.ediary .filter-chip {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--accent-light);
+  border: 2px solid var(--ink);
+  padding: 8px 12px;
+  margin-bottom: 10px;
+  font-size: 13px;
+}
+.ediary .filter-chip button {
+  border: none;
+  background: none;
+  cursor: pointer;
+  color: var(--ink-soft);
+  font-size: 13px;
+}
+.ediary .otd-card {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 10px;
+}
+.ediary .otd-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  border: 2px solid var(--ink);
+  background: var(--accent-light);
+  padding: 10px 12px;
+  cursor: pointer;
+  text-align: left;
+  width: 100%;
+}
+.ediary .otd-item:hover { background: var(--paper-line); }
+.ediary .otd-emoji { font-size: 22px; line-height: 1; flex: 0 0 auto; }
+.ediary .otd-body { display: flex; flex-direction: column; min-width: 0; flex: 1; }
+.ediary .otd-label {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--ink-soft);
+}
+.ediary .otd-text {
+  font-size: 14px;
+  color: var(--ink);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.ediary .loading {
+  text-align: center;
+  padding: 60px 10px;
+  color: var(--ink-soft);
+  font-family: 'Mona12', sans-serif;
+  font-size: 18px;
+}
+</style>
+</head>
+<body>
+
+<div class="ediary" id="ediary-root">
+  <div class="loading">불러오는 중...</div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script>
+(function() {
+  const POPULAR_EMOJIS = ['😊','😢','😡','😴','🥰','😭','🥳','😤',
+                           '☕','🍕','🍜','🍺','🎮','📚','🎬','🎵',
+                           '💻','📝','💼','🎂','🎉','💑',
+                           '☀️','🌧️','❄️','🐱','🐶','🤒','✈️','💰','❤️'];
+
+  const KEYWORD_EMOJI_MAP = [
+    ['커피', '☕'], ['카페', '☕'],
+    ['고양이', '🐱'], ['냥', '🐱'],
+    ['강아지', '🐶'], ['멍멍', '🐶'],
+    ['비', '🌧️'], ['우산', '🌧️'], ['장마', '🌧️'],
+    ['맑음', '☀️'], ['햇살', '☀️'], ['화창', '☀️'], ['더위', '☀️'],
+    ['눈', '❄️'], ['겨울', '❄️'],
+    ['여행', '✈️'], ['비행기', '✈️'], ['공항', '✈️'],
+    ['운동', '💪'], ['헬스', '💪'], ['달리기', '💪'],
+    ['잠', '😴'], ['피곤', '😴'], ['졸림', '😴'], ['졸려', '😴'],
+    ['책', '📚'], ['독서', '📚'], ['공부', '📚'],
+    ['음악', '🎵'], ['노래', '🎵'], ['콘서트', '🎵'],
+    ['돈', '💰'], ['월급', '💰'], ['지출', '💰'],
+    ['축하', '🎉'], ['생일', '🎉'], ['파티', '🎉'],
+    ['피자', '🍕'], ['맛집', '🍕'], ['음식', '🍕'],
+    ['행복', '😀'], ['기쁘', '😀'], ['좋았', '😀'],
+    ['슬픔', '😢'], ['눈물', '😢'], ['힘들', '😢'], ['속상', '😢'],
+    ['화남', '😡'], ['짜증', '😡'], ['화가', '😡'],
+    ['사랑', '❤️'], ['좋아해', '❤️'], ['설렘', '❤️'],
+  ];
+
+  function getSuggestedEmojis(text) {
+    if (!text) return [];
+    const found = [];
+    for (const [kw, emo] of KEYWORD_EMOJI_MAP) {
+      if (text.includes(kw) && !found.includes(emo)) {
+        found.push(emo);
+        if (found.length >= 6) break;
+      }
+    }
+    return found;
+  }
+
+  const root = document.getElementById('ediary-root');
+  let entries = {};
+  let current = new Date();
+  let activeTab = 'calendar';
+  let searchQuery = '';
+  let filterEmoji = null;
+  let recapOpen = false;
+  let recapMode = 'year';
+  let sheetOpen = false;
+  let sheetMode = 'edit'; // 'view' or 'edit'
+  let sheetDate = null;
+  let sheetEmoji = '';
+  let sheetText = '';
+  let customInputOpen = false;
+  let deleteConfirming = false;
+  let backupOpen = false;
+  let importMessage = '';
+  let storageReady = false;
+
+  const pad = n => String(n).padStart(2, '0');
+  const EMOJI_REGEX = /(\p{Extended_Pictographic}(\uFE0F)?(\u200D\p{Extended_Pictographic}(\uFE0F)?)*)/u;
+  const toKey = d => `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
+  const todayKey = toKey(new Date());
+
+  async function loadEntries() {
+    try {
+      const res = await window.storage.get('entries', false);
+      entries = res && res.value ? JSON.parse(res.value) : {};
+    } catch (e) {
+      entries = {};
+    }
+    storageReady = true;
+    render();
+  }
+
+  async function saveEntries() {
+    try {
+      await window.storage.set('entries', JSON.stringify(entries), false);
+    } catch (e) {
+      console.error('저장 실패', e);
+    }
+  }
+
+  function toggleRecap() {
+    recapOpen = !recapOpen;
+    render();
+  }
+
+  function toggleBackup() {
+    backupOpen = !backupOpen;
+    importMessage = '';
+    render();
+  }
+
+  function exportData() {
+    const payload = {
+      exportedAt: new Date().toISOString(),
+      entries
+    };
+    const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    const today = new Date();
+    a.href = url;
+    a.download = `emoji-diary-backup-${today.getFullYear()}${pad(today.getMonth()+1)}${pad(today.getDate())}.json`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  }
+
+  async function importData(file) {
+    try {
+      const text = await file.text();
+      const parsed = JSON.parse(text);
+      if (!parsed || typeof parsed.entries !== 'object') {
+        importMessage = '올바른 백업 파일이 아니에요.';
+        render();
+        return;
+      }
+      entries = { ...entries, ...parsed.entries };
+      await saveEntries();
+      importMessage = `${Object.keys(parsed.entries).length}개의 기록을 불러왔어요.`;
+      render();
+    } catch (e) {
+      importMessage = '파일을 읽는 중 문제가 생겼어요.';
+      render();
+    }
+  }
+
+  function openSheet(dateStr) {
+    if (dateStr > todayKey && !entries[dateStr]) return; // 미래 날짜는 새로 작성 불가
+    sheetDate = dateStr;
+    const e = entries[dateStr];
+    sheetEmoji = e ? e.emoji : '';
+    sheetText = e ? e.text : '';
+    sheetMode = e ? 'view' : 'edit';
+    sheetOpen = true;
+    customInputOpen = false;
+    deleteConfirming = false;
+    render();
+  }
+  function switchToEdit() {
+    sheetMode = 'edit';
+    customInputOpen = false;
+    deleteConfirming = false;
+    render();
+  }
+  function closeSheet() {
+    sheetOpen = false;
+    sheetDate = null;
+    customInputOpen = false;
+    deleteConfirming = false;
+    render();
+  }
+
+  function formatSheetDate(dateStr) {
+    const [y,m,d] = dateStr.split('-').map(Number);
+    const dt = new Date(y, m-1, d);
+    const weekdays = ['일','월','화','수','목','금','토'];
+    return `${y}년 ${m}월 ${d}일 (${weekdays[dt.getDay()]})`;
+  }
+
+  function getOnThisDayEntries() {
+    const now = new Date();
+    const mm = pad(now.getMonth()+1);
+    const dd = pad(now.getDate());
+    const results = [];
+    for (let yearsAgo = 1; yearsAgo <= 20; yearsAgo++) {
+      const y = now.getFullYear() - yearsAgo;
+      const key = `${y}-${mm}-${dd}`;
+      if (entries[key]) results.push({ yearsAgo, key, entry: entries[key] });
+    }
+    return results;
+  }
+
+  function renderOnThisDay() {
+    const matches = getOnThisDayEntries();
+    if (!matches.length) return '';
+    const items = matches.map(({ yearsAgo, key, entry }) => `
+      <button class="otd-item" data-date="${key}">
+        <span class="otd-emoji">${entry.emoji || '📝'}</span>
+        <span class="otd-body">
+          <span class="otd-label">${yearsAgo}년 전 오늘</span>
+          <span class="otd-text">${(entry.text || '').trim() || '(글 없음)'}</span>
+        </span>
+      </button>
+    `).join('');
+    return `<div class="card otd-card">${items}</div>`;
+  }
+
+  function renderCalendar() {
+    const year = current.getFullYear();
+    const month = current.getMonth();
+    const firstDay = new Date(year, month, 1).getDay();
+    const daysInMonth = new Date(year, month+1, 0).getDate();
+
+    let cells = '';
+    for (let i=0; i<firstDay; i++) cells += `<div class="day-cell empty"></div>`;
+    for (let d=1; d<=daysInMonth; d++) {
+      const dateStr = `${year}-${pad(month+1)}-${pad(d)}`;
+      const entry = entries[dateStr];
+      const isToday = dateStr === todayKey;
+      const isFuture = dateStr > todayKey && !entry;
+      cells += `<button class="day-cell ${entry ? 'has-entry' : ''} ${isToday ? 'today' : ''} ${isFuture ? 'future' : ''}" data-date="${dateStr}" ${isFuture ? 'disabled' : ''}>
+        <span class="num">${d}</span>
+        <span class="sticker">${entry ? entry.emoji : ''}</span>
+      </button>`;
+    }
+
+    const isCurrentMonth = year === new Date().getFullYear() && month === new Date().getMonth();
+    return `
+      ${renderOnThisDay()}
+      <div class="card">
+        <div class="today-btn-row">
+          ${!isCurrentMonth ? `<button class="today-btn" id="goto-today-month">오늘</button>` : ''}
+        </div>
+        <div class="month-nav">
+          <button id="prev-month">‹</button>
+          <span class="month-label">${year}년 ${month+1}월</span>
+          <button id="next-month">›</button>
+        </div>
+        <div class="weekdays"><span>일</span><span>월</span><span>화</span><span>수</span><span>목</span><span>금</span><span>토</span></div>
+        <div class="grid">${cells}</div>
+      </div>
+    `;
+  }
+
+  function computeRecap(mode) {
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = now.getMonth();
+    const prefix = mode === 'month' ? `${year}-${pad(month+1)}` : `${year}-`;
+    const label = mode === 'month' ? `${year}년 ${month+1}월` : `${year}년`;
+    const keys = Object.keys(entries).filter(k => k.startsWith(prefix));
+    const total = keys.length;
+    const counts = {};
+    const monthCounts = new Array(12).fill(0);
+    const weekdayCounts = [0,0,0,0,0,0,0];
+    keys.forEach(k => {
+      const e = entries[k];
+      if (e.emoji) counts[e.emoji] = (counts[e.emoji] || 0) + 1;
+      const [y, m, d] = k.split('-').map(Number);
+      monthCounts[m-1]++;
+      weekdayCounts[new Date(y, m-1, d).getDay()]++;
+    });
+    const topEmojis = Object.entries(counts).sort((a,b) => b[1]-a[1]).slice(0, 5).map(([e]) => e);
+    const weekdayNames = ['일','월','화','수','목','금','토'];
+    const busiestMonth = (mode !== 'month' && total) ? monthCounts.indexOf(Math.max(...monthCounts)) + 1 : null;
+    const busiestWeekday = total ? weekdayNames[weekdayCounts.indexOf(Math.max(...weekdayCounts))] : null;
+    return { year, month: month+1, label, total, topEmojis, busiestMonth, busiestWeekday };
+  }
+
+  function computeStats() {
+    const counts = {};
+    let total = 0;
+    const weekdayCounts = [0,0,0,0,0,0,0];
+    const monthCounts = new Array(12).fill(0);
+    const now = new Date();
+    const thisYear = now.getFullYear();
+    const thisMonthPrefix = `${thisYear}-${pad(now.getMonth()+1)}`;
+    let thisMonthCount = 0;
+    let earliestKey = null;
+
+    for (const k in entries) {
+      const emo = entries[k].emoji;
+      if (emo) {
+        counts[emo] = (counts[emo] || 0) + 1;
+      }
+      total++;
+      if (k.startsWith(thisMonthPrefix)) thisMonthCount++;
+      if (!earliestKey || k < earliestKey) earliestKey = k;
+
+      const [y, m, d] = k.split('-').map(Number);
+      const dt = new Date(y, m-1, d);
+      weekdayCounts[dt.getDay()]++;
+      if (y === thisYear) monthCounts[m-1]++;
+    }
+
+    const sorted = Object.entries(counts).sort((a,b) => b[1]-a[1]).slice(0, 8);
+    const uniqueEmojiCount = Object.keys(counts).length;
+
+    let daysSinceStart = 0;
+    if (earliestKey) {
+      const [sy, sm, sd] = earliestKey.split('-').map(Number);
+      const [ty, tm, td] = todayKey.split('-').map(Number);
+      const start = new Date(sy, sm-1, sd);
+      const today = new Date(ty, tm-1, td);
+      daysSinceStart = Math.round((today - start) / 86400000) + 1;
+    }
+
+    return {
+      total, sorted, maxCount: sorted.length ? sorted[0][1] : 1,
+      thisMonthCount, uniqueEmojiCount, daysSinceStart,
+      weekdayCounts, monthCounts
+    };
+  }
+
+  function renderStats() {
+    const { total, sorted, maxCount, thisMonthCount, uniqueEmojiCount, daysSinceStart, weekdayCounts, monthCounts } = computeStats();
+    const bars = sorted.map(([emo, cnt]) => `
+      <div class="bar-row">
+        <button class="bar-emoji" data-tag-emoji="${emo}" title="${emo} 쓴 날 모아보기">${emo}</button>
+        <div class="bar-track"><div class="bar-fill" style="width:${(cnt/maxCount)*100}%"></div></div>
+        <span class="bar-count">${cnt}</span>
+      </div>
+    `).join('');
+
+    const weekdayLabels = ['일','월','화','수','목','금','토'];
+    const maxWeekday = Math.max(1, ...weekdayCounts);
+    const weekdayBars = weekdayCounts.map((c, i) => `
+      <div class="mini-bar" style="height:${(c/maxWeekday)*100}%" title="${weekdayLabels[i]}요일 ${c}개"></div>
+    `).join('');
+    const weekdayLabelsHtml = weekdayLabels.map(l => `<span>${l}</span>`).join('');
+
+    const maxMonth = Math.max(1, ...monthCounts);
+    const monthBars = monthCounts.map((c, i) => `
+      <div class="mini-bar" style="height:${(c/maxMonth)*100}%" title="${i+1}월 ${c}개"></div>
+    `).join('');
+    const monthLabelsHtml = monthCounts.map((c, i) => `<span>${i+1}</span>`).join('');
+
+    if (!total) {
+      return `<div class="card"><div class="empty-msg">아직 기록이 없어요. 오늘 하루를 이모지로 남겨보세요 🖋️</div></div>`;
+    }
+
+    return `
+      <div class="recap-launch-row">
+        <button class="recap-launch-btn" id="open-recap-month">이번 달 돌아보기</button>
+        <button class="recap-launch-btn" id="open-recap-year">올해 돌아보기</button>
+      </div>
+      <div class="stats-summary grid4">
+        <div class="stat-box"><div class="num">${total}</div><div class="lbl">전체 기록</div></div>
+        <div class="stat-box"><div class="num">${thisMonthCount}</div><div class="lbl">이번 달</div></div>
+        <div class="stat-box"><div class="num">${uniqueEmojiCount}</div><div class="lbl">사용한 이모지 종류</div></div>
+        <div class="stat-box"><div class="num">${daysSinceStart}</div><div class="lbl">일째 기록 중</div></div>
+      </div>
+      <div class="card">
+        <div class="hand" style="font-size:18px; font-weight:700; margin-bottom:12px;">자주 쓴 이모지</div>
+        ${sorted.length ? bars : `<div class="empty-msg">기록된 이모지가 없어요.</div>`}
+      </div>
+      <div class="card">
+        <div class="hand" style="font-size:18px; font-weight:700; margin-bottom:12px;">요일별 기록</div>
+        <div class="mini-chart-track">${weekdayBars}</div>
+        <div class="mini-chart-labels">${weekdayLabelsHtml}</div>
+      </div>
+      <div class="card">
+        <div class="hand" style="font-size:18px; font-weight:700; margin-bottom:12px;">${new Date().getFullYear()}년 월별 기록</div>
+        <div class="mini-chart-track">${monthBars}</div>
+        <div class="mini-chart-labels">${monthLabelsHtml}</div>
+      </div>
+    `;
+  }
+
+  function renderRecapCard() {
+    if (!recapOpen) return '';
+    const { label, total, topEmojis, busiestMonth, busiestWeekday } = computeRecap(recapMode);
+    const titleLine = recapMode === 'month' ? `${label},<br>이 달의 기록` : `${label},<br>당신의 하루하루`;
+    const body = total ? `
+        <div class="recap-title">${titleLine}</div>
+        <div class="recap-stat-big">${total}<span class="recap-stat-unit">일의 기록</span></div>
+        <div class="recap-emojis">${topEmojis.join(' ')}</div>
+        ${busiestMonth ? `<div class="recap-detail">가장 활발했던 달 · ${busiestMonth}월</div>` : ''}
+        <div class="recap-detail">가장 자주 기록한 요일 · ${busiestWeekday}요일</div>
+      ` : `
+        <div class="recap-title">${label},<br>아직 시작 전이에요</div>
+        <div class="recap-detail">캘린더에서 오늘 하루를 기록해보세요 🖋️</div>
+      `;
+    return `
+      <div class="overlay fullscreen" id="recap-overlay">
+        <div class="sheet fullscreen-sheet recap-sheet">
+          <div class="sheet-header recap-header">
+            <button class="close-btn" id="close-recap">✕</button>
+          </div>
+          <div class="recap-frame">
+            <div id="recap-capture" class="recap-content">${body}</div>
+          </div>
+          ${total ? `<button class="btn primary" id="save-recap-img">저장</button>` : ''}
+        </div>
+      </div>
+    `;
+  }
+
+  function renderBackupPanel() {
+    if (!backupOpen) return '';
+    const count = Object.keys(entries).length;
+    return `
+      <div class="overlay" id="backup-overlay">
+        <div class="sheet backup-sheet">
+          <div class="sheet-header">
+            <span class="sheet-date">데이터 백업</span>
+            <button class="close-btn" id="close-backup">✕</button>
+          </div>
+          <p class="backup-desc">일기는 이 브라우저에만 저장돼요. 기기를 바꾸거나 데이터가 지워질 상황을 대비해 주기적으로 내보내기 해두는 걸 추천해요. 현재 ${count}개의 기록이 있어요.</p>
+          <div class="backup-actions">
+            <button class="btn primary" id="export-btn">내보내기</button>
+            <label class="btn" id="import-btn" for="import-file-input">가져오기</label>
+          </div>
+          <input type="file" id="import-file-input" accept="application/json" style="display:none;">
+          ${importMessage ? `<p class="import-message">${importMessage}</p>` : ''}
+        </div>
+      </div>
+    `;
+  }
+
+  function renderList() {
+    const allKeys = Object.keys(entries).sort((a, b) => b.localeCompare(a));
+    const q = searchQuery.trim().toLowerCase();
+    let keys = allKeys;
+    if (filterEmoji) keys = keys.filter(k => entries[k].emoji === filterEmoji);
+    if (q) keys = keys.filter(k => {
+      const e = entries[k];
+      return (e.text || '').toLowerCase().includes(q) || (e.emoji || '').includes(q);
+    });
+
+    const searchBox = `
+      <div class="search-box">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" stroke-linejoin="miter"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+        <input type="text" id="search-input" placeholder="일기 검색" value="${searchQuery.replace(/"/g,'&quot;')}">
+        ${searchQuery ? `<button id="clear-search" aria-label="검색어 지우기">✕</button>` : ''}
+      </div>
+    `;
+    const filterChip = filterEmoji ? `
+      <div class="filter-chip">
+        <span>${filterEmoji} 만 보는 중</span>
+        <button id="clear-filter-emoji" aria-label="필터 해제">✕</button>
+      </div>
+    ` : '';
+
+    if (!allKeys.length) {
+      return `<div class="card"><div class="empty-msg">아직 쓴 일기가 없어요. 캘린더에서 날짜를 눌러 기록해보세요 🖋️</div></div>`;
+    }
+    if (!keys.length) {
+      const msg = filterEmoji && q ? `"${searchQuery}"와 ${filterEmoji} 조건에 맞는 기록이 없어요.`
+        : filterEmoji ? `${filterEmoji}를 쓴 기록이 없어요.`
+        : `"${searchQuery}"에 대한 검색 결과가 없어요.`;
+      return `${filterChip}${searchBox}<div class="card"><div class="empty-msg">${msg}</div></div>`;
+    }
+    const items = keys.map(k => {
+      const e = entries[k];
+      const preview = (e.text || '').trim();
+      return `
+        <div class="list-item">
+          <button class="list-emoji" data-filter-emoji="${e.emoji || ''}" title="이 이모지만 보기">${e.emoji || '📝'}</button>
+          <button class="list-body" data-date="${k}">
+            <span class="list-date">${formatSheetDate(k)}</span>
+            <span class="list-text">${preview ? preview : '(글 없음)'}</span>
+          </button>
+        </div>
+      `;
+    }).join('');
+    return `${filterChip}${searchBox}<div class="card list-card">${items}</div>`;
+  }
+
+  function renderViewSheet() {
+    const e = entries[sheetDate] || {};
+    const text = (e.text || '').trim();
+    const actions = deleteConfirming
+      ? `
+        <div class="confirm-row">
+          <span class="confirm-text">정말 삭제할까요?</span>
+          <div class="sheet-actions">
+            <button class="btn" id="cancel-delete">취소</button>
+            <button class="btn danger" id="confirm-delete">삭제</button>
+          </div>
+        </div>
+      `
+      : `
+        <div class="sheet-actions">
+          <button class="btn primary" id="edit-entry">수정</button>
+          <button class="btn danger" id="delete-entry">삭제</button>
+        </div>
+      `;
+    return `
+      <div class="overlay fullscreen" id="sheet-overlay">
+        <div class="sheet fullscreen-sheet">
+          <div class="sheet-header">
+            <span class="view-top-row">
+              <span class="view-emoji">${e.emoji || '📝'}</span>
+              <span class="sheet-date">${formatSheetDate(sheetDate)}</span>
+            </span>
+            <button class="close-btn" id="close-sheet">✕</button>
+          </div>
+          <div class="view-text">${text ? text.replace(/</g,'&lt;') : '작성된 글이 없어요.'}</div>
+          ${actions}
+        </div>
+      </div>
+    `;
+  }
+
+  function renderEditSheet() {
+    const headerEmojiCell = customInputOpen
+      ? `<input type="text" id="custom-emoji-inline" class="header-emoji-input" maxlength="12" value="">`
+      : `<button class="header-emoji-btn" id="add-custom-emoji">${sheetEmoji || '+'}</button>`;
+    const hasExisting = !!entries[sheetDate];
+    const popularRow = `
+      <div class="row-label">자주 쓰는 이모지</div>
+      <div class="recent-row">
+        ${POPULAR_EMOJIS.map(e => `<button class="${e === sheetEmoji ? 'sel' : ''}" data-emoji="${e}">${e}</button>`).join('')}
+      </div>
+    `;
+
+    const actions = deleteConfirming
+      ? `
+        <div class="confirm-row">
+          <span class="confirm-text">정말 삭제할까요?</span>
+          <div class="sheet-actions">
+            <button class="btn" id="cancel-delete">취소</button>
+            <button class="btn danger" id="confirm-delete">삭제</button>
+          </div>
+        </div>
+      `
+      : `
+        <div class="sheet-actions">
+          ${hasExisting ? `<button class="btn danger" id="delete-entry">삭제</button>` : ''}
+          <button class="btn primary" id="save-entry">저장</button>
+        </div>
+      `;
+
+    return `
+      <div class="overlay fullscreen" id="sheet-overlay">
+        <div class="sheet fullscreen-sheet">
+          <div class="sheet-header">
+            <span class="view-top-row">
+              ${headerEmojiCell}
+              <span class="sheet-date">${formatSheetDate(sheetDate)}</span>
+            </span>
+            <button class="close-btn" id="close-sheet">✕</button>
+          </div>
+          ${popularRow}
+          <div id="emoji-suggestions">${renderSuggestionChips(getSuggestedEmojis(sheetText))}</div>
+          <textarea id="entry-text" placeholder="오늘 하루는 어땠나요?">${sheetText}</textarea>
+          ${actions}
+        </div>
+      </div>
+    `;
+  }
+
+  function renderSuggestionChips(list) {
+    if (!list.length) return '';
+    return `
+      <div class="row-label">✨ 이런 이모지 어때요?</div>
+      <div class="recent-row">
+        ${list.map(e => `<button class="${e === sheetEmoji ? 'sel' : ''}" data-emoji="${e}">${e}</button>`).join('')}
+      </div>
+    `;
+  }
+
+  function renderSheet() {
+    if (!sheetOpen) return '';
+    return sheetMode === 'view' ? renderViewSheet() : renderEditSheet();
+  }
+
+  function render() {
+    root.className = 'ediary';
+    if (!storageReady) {
+      root.innerHTML = `<div class="loading">불러오는 중...</div>`;
+      return;
+    }
+    root.innerHTML = `
+      <div class="header">
+        <button class="icon-btn" id="backup-toggle" aria-label="백업">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" stroke-linejoin="miter"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="M7 10l5 5 5-5"/><path d="M12 15V3"/></svg>
+        </button>
+        <div class="tabs">
+          <button class="tab-btn ${activeTab==='calendar'?'active':''}" data-tab="calendar" aria-label="캘린더">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" stroke-linejoin="miter"><rect x="3" y="5" width="18" height="16" rx="1"/><path d="M8 3v4M16 3v4M3 10h18"/></svg>
+          </button>
+          <button class="tab-btn ${activeTab==='list'?'active':''}" data-tab="list" aria-label="일기 목록">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" stroke-linejoin="miter"><path d="M8 6h13M8 12h13M8 18h13"/><circle cx="3.5" cy="6" r="1.3" fill="currentColor" stroke="none"/><circle cx="3.5" cy="12" r="1.3" fill="currentColor" stroke="none"/><circle cx="3.5" cy="18" r="1.3" fill="currentColor" stroke="none"/></svg>
+          </button>
+          <button class="tab-btn ${activeTab==='stats'?'active':''}" data-tab="stats" aria-label="통계">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" stroke-linejoin="miter"><path d="M4 20V10M12 20V4M20 20v-7"/></svg>
+          </button>
+        </div>
+      </div>
+      ${activeTab === 'calendar' ? renderCalendar() : activeTab === 'list' ? renderList() : renderStats()}
+      ${renderSheet()}
+      ${renderBackupPanel()}
+      ${renderRecapCard()}
+    `;
+    attachEvents();
+  }
+
+  function attachEvents() {
+    const backupBtn = root.querySelector('#backup-toggle');
+    if (backupBtn) backupBtn.onclick = toggleBackup;
+
+    root.querySelectorAll('.tab-btn').forEach(btn => {
+      btn.onclick = () => { activeTab = btn.dataset.tab; render(); };
+    });
+
+    const searchInput = root.querySelector('#search-input');
+    if (searchInput) {
+      let composing = false;
+      const commitSearch = () => {
+        searchQuery = searchInput.value;
+        render();
+        const el = root.querySelector('#search-input');
+        if (el) {
+          el.focus();
+          const pos = el.value.length;
+          el.setSelectionRange(pos, pos);
+        }
+      };
+      searchInput.addEventListener('compositionstart', () => { composing = true; });
+      searchInput.addEventListener('compositionend', () => { composing = false; commitSearch(); });
+      searchInput.oninput = () => {
+        if (composing) return;
+        commitSearch();
+      };
+    }
+    const clearSearchBtn = root.querySelector('#clear-search');
+    if (clearSearchBtn) {
+      clearSearchBtn.onclick = () => { searchQuery = ''; render(); };
+    }
+
+    const prevBtn = root.querySelector('#prev-month');
+    const nextBtn = root.querySelector('#next-month');
+    if (prevBtn) prevBtn.onclick = () => { current.setMonth(current.getMonth()-1); render(); };
+    if (nextBtn) nextBtn.onclick = () => { current.setMonth(current.getMonth()+1); render(); };
+
+    const gotoTodayMonth = root.querySelector('#goto-today-month');
+    if (gotoTodayMonth) gotoTodayMonth.onclick = () => { current = new Date(); render(); };
+
+    root.querySelectorAll('.otd-item').forEach(item => {
+      item.onclick = () => openSheet(item.dataset.date);
+    });
+
+    root.querySelectorAll('.day-cell:not(.empty)').forEach(cell => {
+      cell.onclick = () => openSheet(cell.dataset.date);
+    });
+
+    root.querySelectorAll('.list-body[data-date]').forEach(item => {
+      item.onclick = () => openSheet(item.dataset.date);
+    });
+    root.querySelectorAll('.list-emoji[data-filter-emoji]').forEach(btn => {
+      btn.onclick = () => {
+        const emo = btn.dataset.filterEmoji;
+        if (emo) { filterEmoji = emo; render(); }
+      };
+    });
+    const clearFilterBtn = root.querySelector('#clear-filter-emoji');
+    if (clearFilterBtn) clearFilterBtn.onclick = () => { filterEmoji = null; render(); };
+
+    root.querySelectorAll('.bar-emoji[data-tag-emoji]').forEach(btn => {
+      btn.onclick = () => {
+        filterEmoji = btn.dataset.tagEmoji;
+        searchQuery = '';
+        activeTab = 'list';
+        render();
+      };
+    });
+
+    const overlay = root.querySelector('#sheet-overlay');
+    if (overlay) {
+      overlay.onclick = (e) => { if (e.target === overlay) closeSheet(); };
+    }
+    const closeBtn = root.querySelector('#close-sheet');
+    if (closeBtn) closeBtn.onclick = closeSheet;
+
+    const backupOverlay = root.querySelector('#backup-overlay');
+    if (backupOverlay) {
+      backupOverlay.onclick = (e) => { if (e.target === backupOverlay) toggleBackup(); };
+    }
+    const closeBackupBtn = root.querySelector('#close-backup');
+    if (closeBackupBtn) closeBackupBtn.onclick = toggleBackup;
+    const exportBtn = root.querySelector('#export-btn');
+    if (exportBtn) exportBtn.onclick = exportData;
+    const importInput = root.querySelector('#import-file-input');
+    if (importInput) {
+      importInput.onchange = () => {
+        if (importInput.files && importInput.files[0]) importData(importInput.files[0]);
+      };
+    }
+
+    const openRecapMonthBtn = root.querySelector('#open-recap-month');
+    if (openRecapMonthBtn) openRecapMonthBtn.onclick = () => { recapMode = 'month'; recapOpen = true; render(); };
+    const openRecapYearBtn = root.querySelector('#open-recap-year');
+    if (openRecapYearBtn) openRecapYearBtn.onclick = () => { recapMode = 'year'; recapOpen = true; render(); };
+    const recapOverlay = root.querySelector('#recap-overlay');
+    if (recapOverlay) {
+      recapOverlay.onclick = (e) => { if (e.target === recapOverlay) toggleRecap(); };
+    }
+    const closeRecapBtn = root.querySelector('#close-recap');
+    if (closeRecapBtn) closeRecapBtn.onclick = toggleRecap;
+    const saveRecapBtn = root.querySelector('#save-recap-img');
+    if (saveRecapBtn) {
+      saveRecapBtn.onclick = () => {
+        const target = root.querySelector('#recap-capture');
+        if (!target || typeof html2canvas === 'undefined') return;
+        saveRecapBtn.disabled = true;
+        saveRecapBtn.textContent = '저장 중...';
+        // recap-capture is responsive (9:16); scale so output is ~1080px wide for Instagram Story
+        const renderScale = 1080 / target.offsetWidth;
+        html2canvas(target, { backgroundColor: null, scale: renderScale, useCORS: true }).then(canvas => {
+          const a = document.createElement('a');
+          a.href = canvas.toDataURL('image/png');
+          const { year, month } = computeRecap(recapMode);
+          a.download = recapMode === 'month'
+            ? `emoji-diary-recap-${year}-${pad(month)}.png`
+            : `emoji-diary-recap-${year}.png`;
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+          saveRecapBtn.disabled = false;
+          saveRecapBtn.textContent = '저장';
+        }).catch(() => {
+          saveRecapBtn.disabled = false;
+          saveRecapBtn.textContent = '저장';
+        });
+      };
+    }
+
+    const editBtn = root.querySelector('#edit-entry');
+    if (editBtn) editBtn.onclick = switchToEdit;
+
+    root.querySelectorAll('.recent-row button[data-emoji]').forEach(btn => {
+      btn.onclick = () => {
+        sheetEmoji = btn.dataset.emoji;
+        customInputOpen = false;
+        const ta = root.querySelector('#entry-text');
+        sheetText = ta ? ta.value : sheetText;
+        render();
+      };
+    });
+
+    const plusBtn = root.querySelector('#add-custom-emoji');
+    if (plusBtn) {
+      plusBtn.onclick = () => {
+        customInputOpen = true;
+        const ta = root.querySelector('#entry-text');
+        sheetText = ta ? ta.value : sheetText;
+        render();
+        const inlineInput = root.querySelector('#custom-emoji-inline');
+        if (inlineInput) inlineInput.focus();
+      };
+    }
+    const inlineInput = root.querySelector('#custom-emoji-inline');
+    if (inlineInput) {
+      const confirmInline = () => {
+        const raw = inlineInput.value.trim();
+        if (!raw) {
+          customInputOpen = false;
+          render();
+          return;
+        }
+        const match = raw.match(EMOJI_REGEX);
+        if (match) {
+          sheetEmoji = match[0];
+          customInputOpen = false;
+          render();
+        } else {
+          inlineInput.value = '';
+          inlineInput.placeholder = '이모지만 가능해요';
+          inlineInput.classList.add('input-error');
+          setTimeout(() => { inlineInput.classList.remove('input-error'); }, 400);
+        }
+      };
+      inlineInput.onblur = confirmInline;
+      inlineInput.onkeydown = (ev) => {
+        if (ev.key === 'Enter') { ev.preventDefault(); confirmInline(); }
+        if (ev.key === 'Escape') { customInputOpen = false; render(); }
+      };
+    }
+
+    const textArea = root.querySelector('#entry-text');
+    if (textArea) {
+      const attachSuggestionChips = () => {
+        root.querySelectorAll('#emoji-suggestions button[data-emoji]').forEach(btn => {
+          btn.onclick = () => {
+            sheetEmoji = btn.dataset.emoji;
+            sheetText = textArea.value;
+            render();
+          };
+        });
+      };
+      attachSuggestionChips();
+      textArea.oninput = () => {
+        sheetText = textArea.value;
+        const suggBox = root.querySelector('#emoji-suggestions');
+        if (suggBox) {
+          suggBox.innerHTML = renderSuggestionChips(getSuggestedEmojis(sheetText));
+          attachSuggestionChips();
+        }
+      };
+      setTimeout(() => { textArea.selectionStart = textArea.value.length; }, 0);
+    }
+
+    const saveBtn = root.querySelector('#save-entry');
+    if (saveBtn) {
+      saveBtn.onclick = async () => {
+        const ta = root.querySelector('#entry-text');
+        const finalEmoji = sheetEmoji;
+        const finalText = ta ? ta.value : sheetText;
+        if (!finalEmoji && !finalText.trim()) { closeSheet(); return; }
+        entries[sheetDate] = { emoji: finalEmoji || '📝', text: finalText, updatedAt: Date.now() };
+        await saveEntries();
+        closeSheet();
+      };
+    }
+
+    const delBtn = root.querySelector('#delete-entry');
+    if (delBtn) {
+      delBtn.onclick = () => {
+        deleteConfirming = true;
+        render();
+      };
+    }
+    const cancelDeleteBtn = root.querySelector('#cancel-delete');
+    if (cancelDeleteBtn) {
+      cancelDeleteBtn.onclick = () => {
+        deleteConfirming = false;
+        render();
+      };
+    }
+    const confirmDeleteBtn = root.querySelector('#confirm-delete');
+    if (confirmDeleteBtn) {
+      confirmDeleteBtn.onclick = async () => {
+        delete entries[sheetDate];
+        await saveEntries();
+        deleteConfirming = false;
+        closeSheet();
+      };
+    }
+  }
+
+  loadEntries();
+})();
+</script>
+</body>
+</html>
